@@ -22,10 +22,12 @@ public class Surface extends JPanel {
   private Cell current;
 
   private Color currentColor = new Color(50, 230, 70);
-  private Color visitedColor = new Color(255, 0, 255, 90);
+  private Color visitedColor = new Color(50, 100, 255, 90);
   private Color wallColor = new Color(230, 230, 230);
 
   private Stack<Cell> stack = new Stack<Cell>();
+
+  static boolean finished = false;
 
   public Surface() {
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -38,6 +40,7 @@ public class Surface extends JPanel {
     }
 
     current = grid.get(0);
+    stack.push(current);
   }
 
   public void doDrawing(Graphics g) {
@@ -69,6 +72,10 @@ public class Surface extends JPanel {
   }
 
   public void tick() {
+    if(stack.isEmpty()) {
+      finished = true;
+      return;
+    }
     current.visited = true;
     Cell next = current.getNeighbour();
     if (next != null) {
@@ -80,7 +87,6 @@ public class Surface extends JPanel {
 
       current = next;
     } else if (!stack.isEmpty()) {
-      System.out.println("no neighbours");
       current = stack.pop();
     }
   }

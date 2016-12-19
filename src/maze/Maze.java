@@ -25,12 +25,14 @@ public class Maze extends JFrame implements Runnable {
     running = true;
     thread = new Thread(this);
     thread.start();
+    System.out.println("Started!");
   }
 
   public synchronized void stop() {
     if (!running) return;
     running = false;
     try {
+      System.out.println("Stopped!");
       thread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -39,7 +41,7 @@ public class Maze extends JFrame implements Runnable {
 
   @Override
   public void run() {
-    System.out.println("running!");
+    System.out.println("Running!");
     running = true;
 
     double delta = 1.0 / UPS;
@@ -57,6 +59,7 @@ public class Maze extends JFrame implements Runnable {
         // assign the time for the next update
         nextTime += delta;
         surface.tick();
+        if(surface.finished) stop();
         if ((currTime < nextTime) || (skippedFrames > maxSkippedFrames)) {
           surface.render();
           skippedFrames = 1;
