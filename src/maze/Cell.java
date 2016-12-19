@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Cell {
-  private int i;
-  private int j;
-  private boolean[] walls = { true, true, true, true };
+  int i;
+  int j;
+  boolean[] walls = { true, true, true, true };
   private int w = Surface.CELL_SIZE;
   boolean visited = false;
   private ArrayList<Cell> grid = Surface.grid;
@@ -63,13 +63,13 @@ public class Cell {
     int rightIndex = index(i + 1, j);
     int bottomIndex = index(i, j + 1);
     int leftIndex = index(i - 1, j);
-//    System.out.println(topIndex);
+    //    System.out.println(topIndex);
 
-    if(topIndex != -1 && !grid.get(topIndex).visited) neighbours.add(grid.get(topIndex));
-    if(rightIndex != -1 && !grid.get(rightIndex).visited) neighbours.add(grid.get(rightIndex));
-    if(bottomIndex != -1 && !grid.get(bottomIndex).visited) neighbours.add(grid.get(bottomIndex));
-    if(leftIndex != -1 && !grid.get(leftIndex).visited) neighbours.add(grid.get(leftIndex));
-    if(neighbours.size() > 0) {
+    if (topIndex != -1 && !grid.get(topIndex).visited) neighbours.add(grid.get(topIndex));
+    if (rightIndex != -1 && !grid.get(rightIndex).visited) neighbours.add(grid.get(rightIndex));
+    if (bottomIndex != -1 && !grid.get(bottomIndex).visited) neighbours.add(grid.get(bottomIndex));
+    if (leftIndex != -1 && !grid.get(leftIndex).visited) neighbours.add(grid.get(leftIndex));
+    if (neighbours.size() > 0) {
       int rand = r.nextInt(neighbours.size());
       return neighbours.get(rand);
     }
@@ -77,7 +77,7 @@ public class Cell {
   }
 
   private int index(int i, int j) {
-    if(i < 0 || j < 0 || i > cols - 1 || j > rows - 1) return -1;
+    if (i < 0 || j < 0 || i > cols - 1 || j > rows - 1) return -1;
     return i + j * cols;
   }
 }
