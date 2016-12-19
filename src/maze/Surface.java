@@ -20,6 +20,7 @@ public class Surface extends JPanel {
 
   private Cell current;
 
+  private Color currentColor = new Color(50, 230, 70);
   private Color visitedColor = new Color(255, 0, 255, 90);
   private Color wallColor = new Color(230, 230, 230);
 
@@ -40,9 +41,12 @@ public class Surface extends JPanel {
     Graphics2D g2d = (Graphics2D) g.create();
     g2d.setColor(Color.GRAY);
     g2d.fillRect(0, 0, WIDTH, HEIGHT);
+    g2d.setColor(currentColor);
+    g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
     for (Cell c : grid) {
       g2d.setColor(visitedColor);
-      if(c.visited) g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
+      if(c.visited && !c.equals(current))
+        g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
       g2d.setColor(wallColor);
       g2d.draw(c.getTop());
       g2d.draw(c.getRight());
