@@ -72,7 +72,7 @@ public class Surface extends JPanel {
   }
 
   public void tick() {
-    if(stack.isEmpty()) {
+    if (stack.isEmpty()) {
       finished = true;
       return;
     }

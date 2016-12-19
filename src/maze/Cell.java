@@ -63,12 +63,12 @@ public class Cell {
     int rightIndex = index(i + 1, j);
     int bottomIndex = index(i, j + 1);
     int leftIndex = index(i - 1, j);
-    //    System.out.println(topIndex);
 
     if (topIndex != -1 && !grid.get(topIndex).visited) neighbours.add(grid.get(topIndex));
     if (rightIndex != -1 && !grid.get(rightIndex).visited) neighbours.add(grid.get(rightIndex));
     if (bottomIndex != -1 && !grid.get(bottomIndex).visited) neighbours.add(grid.get(bottomIndex));
     if (leftIndex != -1 && !grid.get(leftIndex).visited) neighbours.add(grid.get(leftIndex));
+
     if (neighbours.size() > 0) {
       int rand = r.nextInt(neighbours.size());
       return neighbours.get(rand);
