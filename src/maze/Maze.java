@@ -53,14 +53,14 @@ public class Maze extends JFrame implements Runnable {
     int maxSkippedFrames = 5;
     while (running) {
       // convert the time to seconds
-      double currTime = System.nanoTime() / 1000000000.0;
-      if ((currTime - nextTime) > maxTimeDiff) nextTime = currTime;
-      if (currTime >= nextTime) {
+      double curTime = System.nanoTime() / 1000000000.0;
+      if ((curTime - nextTime) > maxTimeDiff) nextTime = curTime;
+      if (curTime >= nextTime) {
         // assign the time for the next update
         nextTime += delta;
         surface.tick();
         if(surface.finished) stop();
-        if ((currTime < nextTime) || (skippedFrames > maxSkippedFrames)) {
+        if ((curTime < nextTime) || (skippedFrames > maxSkippedFrames)) {
           surface.render();
           skippedFrames = 1;
         } else {
@@ -68,7 +68,7 @@ public class Maze extends JFrame implements Runnable {
         }
       } else {
         // calculate the time to sleep
-        int sleepTime = (int) (1000.0 * (nextTime - currTime));
+        int sleepTime = (int) (1000.0 * (nextTime - curTime));
         // sanity check
         if (sleepTime > 0) {
           // sleep until the next update
