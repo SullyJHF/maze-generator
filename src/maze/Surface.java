@@ -48,7 +48,7 @@ public class Surface extends JPanel {
     g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
     for (Cell c : grid) {
       g2d.setColor(visitedColor);
-      if(c.visited && !c.equals(current))
+      if (c.visited && !c.equals(current))
         g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
       g2d.setColor(wallColor);
       g2d.draw(c.getTop());
@@ -71,7 +71,7 @@ public class Surface extends JPanel {
   public void tick() {
     current.visited = true;
     Cell next = current.getNeighbour();
-    if(next != null) {
+    if (next != null) {
       next.visited = true;
 
       stack.push(current);
@@ -87,16 +87,16 @@ public class Surface extends JPanel {
 
   private void removeWalls(Cell a, Cell b) {
     int x = a.i - b.i;
-    if(x == 1) {
+    if (x == 1) {
       a.walls[3] = false;
       b.walls[1] = false;
-    } else if(x == -1){
+    } else if (x == -1) {
       a.walls[1] = false;
       b.walls[3] = false;
     }
 
     int y = a.j - b.j;
-    if(y == 1) {
+    if (y == 1) {
       a.walls[0] = false;
       b.walls[2] = false;
     } else if (y == -1) {
