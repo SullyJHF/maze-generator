@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 
@@ -23,6 +24,8 @@ public class Surface extends JPanel {
   private Color currentColor = new Color(50, 230, 70);
   private Color visitedColor = new Color(255, 0, 255, 90);
   private Color wallColor = new Color(230, 230, 230);
+
+  private Stack<Cell> stack = new Stack<Cell>();
 
   public Surface() {
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -71,11 +74,14 @@ public class Surface extends JPanel {
     if(next != null) {
       next.visited = true;
 
+      stack.push(current);
+
       removeWalls(current, next);
 
       current = next;
-    } else {
+    } else if (!stack.isEmpty()) {
       System.out.println("no neighbours");
+      current = stack.pop();
     }
   }
 
