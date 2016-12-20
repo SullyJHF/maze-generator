@@ -34,6 +34,9 @@ public class Surface extends JPanel {
   private Cell start;
   private Cell end;
 
+  private int distFromStart = 0;
+  private int biggest = distFromStart;
+
   static boolean finished = false;
 
   public Surface() {
@@ -101,22 +104,38 @@ public class Surface extends JPanel {
       render();
       return;
     }
-    current.visited = true;
-    if (current.i == ROWS - 1 && current.j == COLS - 1) {
+    current.distFromStart = distFromStart;
+    if(current.distFromStart > biggest) {
+      biggest = current.distFromStart;
       end = current;
     }
+    current.visited = true;
     Cell next = current.getNeighbour();
     if (next != null) {
       next.visited = true;
 
       stack.push(current);
+      distFromStart++;
 
       removeWalls(current, next);
 
       current = next;
     } else if (!stack.isEmpty()) {
       current = stack.pop();
+      distFromStart--;
     }
+  }
+
+  private Cell getFurthestCell() {
+    Cell end = new Cell(0, 0);
+    int biggest = 0;
+    for(Cell c : grid) {
+      if(c.distFromStart > biggest) {
+        biggest = c.distFromStart;
+        end = c;
+      }
+    }
+    return end;
   }
 
   private void removeWalls(Cell a, Cell b) {

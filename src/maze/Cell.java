@@ -15,6 +15,7 @@ public class Cell {
   private int cols = Surface.COLS;
   private int rows = Surface.ROWS;
   private Random r = new Random();
+  int distFromStart;
 
   public Cell(int i, int j) {
     this.i = i;
