@@ -25,7 +25,13 @@ public class Surface extends JPanel {
   private Color stackColor = new Color(120, 100, 200);
   private Color wallColor = new Color(230, 230, 230);
 
+  private Color startColor = new Color(65, 255, 150, 100);
+  private Color endColor = new Color(255, 80, 180, 100);
+
   private Stack<Cell> stack = new Stack<Cell>();
+
+  private Cell start;
+  private Cell end;
 
   static boolean finished = false;
 
@@ -40,6 +46,7 @@ public class Surface extends JPanel {
     }
 
     current = grid.get(0);
+    start = current;
     stack.push(current);
   }
 
@@ -47,15 +54,28 @@ public class Surface extends JPanel {
     Graphics2D g2d = (Graphics2D) g.create();
     g2d.setColor(Color.GRAY);
     g2d.fillRect(0, 0, WIDTH, HEIGHT);
-    g2d.setColor(currentColor);
-    g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
+    if (!finished) {
+      g2d.setColor(currentColor);
+      g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
+    }
     for (Cell c : grid) {
+      Rectangle r = new Rectangle(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
       g2d.setColor(visitedColor);
       if (c.visited && !c.equals(current))
-        g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
+        g2d.fill(r);
+
       g2d.setColor(stackColor);
       if (stack.contains(c))
-        g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
+        g2d.fill(r);
+
+      g2d.setColor(startColor);
+      if (c.equals(start))
+        g2d.fill(r);
+
+      g2d.setColor(endColor);
+      if (c.equals(end))
+        g2d.fill(r);
+
       g2d.setColor(wallColor);
       g2d.draw(c.getTop());
       g2d.draw(c.getRight());
@@ -77,9 +97,13 @@ public class Surface extends JPanel {
   public void tick() {
     if (stack.isEmpty()) {
       finished = true;
+      render();
       return;
     }
     current.visited = true;
+    if (current.i == ROWS - 1 && current.j == COLS - 1) {
+      end = current;
+    }
     Cell next = current.getNeighbour();
     if (next != null) {
       next.visited = true;
