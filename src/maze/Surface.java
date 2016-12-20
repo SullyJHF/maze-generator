@@ -43,6 +43,8 @@ public class Surface extends JPanel {
 
   boolean finished = false;
 
+  boolean showSolution = true;
+
   public Surface() {
     System.out.println("NEW SURFACE");
     finished = false;
@@ -76,7 +78,7 @@ public class Surface extends JPanel {
         g2d.fill(r);
 
       g2d.setColor(solutionColor);
-      if (solution.contains(c))
+      if (showSolution && solution.contains(c))
         g2d.fill(r);
 
       g2d.setColor(startColor);
