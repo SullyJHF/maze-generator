@@ -34,8 +34,7 @@ public class Surface extends JPanel {
   private Cell start;
   private Cell end;
 
-  private int distFromStart = 0;
-  private int biggest = distFromStart;
+  private int biggest = stack.size();
 
   static boolean finished = false;
 
@@ -104,7 +103,7 @@ public class Surface extends JPanel {
       render();
       return;
     }
-    current.distFromStart = distFromStart;
+    current.distFromStart = stack.size();
     if(current.distFromStart > biggest) {
       biggest = current.distFromStart;
       end = current;
@@ -115,14 +114,12 @@ public class Surface extends JPanel {
       next.visited = true;
 
       stack.push(current);
-      distFromStart++;
 
       removeWalls(current, next);
 
       current = next;
     } else if (!stack.isEmpty()) {
       current = stack.pop();
-      distFromStart--;
     }
   }
 
