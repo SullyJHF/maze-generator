@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -72,7 +71,7 @@ public class Surface extends JPanel {
   }
 
   public void render() {
-    this.paintImmediately(new Rectangle(0, 0, WIDTH, HEIGHT));
+    repaint();
   }
 
   public void tick() {
