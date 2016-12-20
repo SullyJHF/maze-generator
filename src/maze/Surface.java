@@ -22,7 +22,8 @@ public class Surface extends JPanel {
   private Cell current;
 
   private Color currentColor = new Color(50, 230, 70);
-  private Color visitedColor = new Color(50, 100, 255, 90);
+  private Color visitedColor = new Color(100, 75, 167);
+  private Color stackColor = new Color(120, 100, 200);
   private Color wallColor = new Color(230, 230, 230);
 
   private Stack<Cell> stack = new Stack<Cell>();
@@ -52,6 +53,9 @@ public class Surface extends JPanel {
     for (Cell c : grid) {
       g2d.setColor(visitedColor);
       if (c.visited && !c.equals(current))
+        g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
+      g2d.setColor(stackColor);
+      if (stack.contains(c))
         g2d.fillRect(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
       g2d.setColor(wallColor);
       g2d.draw(c.getTop());
