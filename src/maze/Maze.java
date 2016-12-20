@@ -31,7 +31,6 @@ public class Maze extends JFrame implements Runnable, MouseListener {
     running = true;
     thread = new Thread(this);
     thread.start();
-    startTime = System.nanoTime() / 1000000000.0;
     System.out.println("Started!");
   }
 
@@ -40,7 +39,6 @@ public class Maze extends JFrame implements Runnable, MouseListener {
     running = false;
     try {
       System.out.println("Stopped!");
-      System.out.println("Generated in: " + (System.nanoTime() / 1000000000.0 - startTime) + " seconds");
       thread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -59,6 +57,7 @@ public class Maze extends JFrame implements Runnable, MouseListener {
     double maxTimeDiff = 0.5;
     int skippedFrames = 1;
     int maxSkippedFrames = 5;
+    startTime = System.nanoTime() / 1000000000.0;
     while (running) {
       // convert the time to seconds
       double curTime = System.nanoTime() / 1000000000.0;
@@ -88,6 +87,7 @@ public class Maze extends JFrame implements Runnable, MouseListener {
         }
       }
     }
+    System.out.println("Generated in: " + (System.nanoTime() / 1000000000.0 - startTime) + " seconds");
   }
 
   @Override

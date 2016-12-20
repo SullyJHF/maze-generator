@@ -45,6 +45,8 @@ public class Surface extends JPanel {
 
   boolean showSolution = true;
 
+  boolean skipVisited = true;
+
   public Surface() {
     System.out.println("NEW SURFACE");
     finished = false;
@@ -114,7 +116,6 @@ public class Surface extends JPanel {
   public void tick() {
     if (stack.isEmpty()) {
       finished = true;
-      System.out.println(solution.size() + " " + biggest);
       render();
       return;
     }
@@ -122,8 +123,10 @@ public class Surface extends JPanel {
     if (current.distFromStart > biggest) {
       biggest = current.distFromStart;
       end = current;
-      solution.clear();
-      fork = null;
+      if (showSolution) {
+        solution.clear();
+        fork = null;
+      }
     }
     current.visited = true;
     Cell next = current.getNeighbour();
@@ -131,13 +134,27 @@ public class Surface extends JPanel {
       next.visited = true;
 
       stack.push(current);
-      if (!solution.isEmpty()) solution.remove(current);
 
       removeWalls(current, next);
 
       current = next;
     } else if (!stack.isEmpty()) {
-      current = stack.pop();
+      while (skipVisited && current.getNeighbour() == null) {
+        if(stack.isEmpty()) break;
+        current = stack.pop();
+
+        fillSolution();
+      }
+
+      if(!skipVisited) {
+        current = stack.pop();
+        fillSolution();
+      }
+    }
+  }
+
+  private void fillSolution() {
+    if (showSolution) {
       if (fork == null && current.getNeighbour() == null) {
         solution.push(current);
       } else if (fork == null && current.getNeighbour() != null) {
@@ -147,18 +164,6 @@ public class Surface extends JPanel {
         fork = null;
       }
     }
-  }
-
-  private Cell getFurthestCell() {
-    Cell end = new Cell(0, 0);
-    int biggest = 0;
-    for (Cell c : grid) {
-      if (c.distFromStart > biggest) {
-        biggest = c.distFromStart;
-        end = c;
-      }
-    }
-    return end;
   }
 
   private void removeWalls(Cell a, Cell b) {
