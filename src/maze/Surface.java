@@ -14,8 +14,8 @@ public class Surface extends JPanel {
   private final static int WIDTH = 800;
   private final static int HEIGHT = WIDTH;
   static final int CELL_SIZE = 20;
-  final static int ROWS = WIDTH / CELL_SIZE;
-  final static int COLS = HEIGHT / CELL_SIZE;
+  final static int ROWS = HEIGHT / CELL_SIZE;
+  final static int COLS = WIDTH / CELL_SIZE;
 
   static ArrayList<Cell> grid;
 
