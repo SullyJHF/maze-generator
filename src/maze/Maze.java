@@ -6,7 +6,7 @@ public class Maze extends JFrame implements Runnable {
   private Thread thread;
   private boolean running = false;
 
-  private final int UPS = 5;
+  private final int UPS = 60;
 
   private double startTime;
 
