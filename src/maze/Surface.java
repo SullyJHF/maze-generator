@@ -26,19 +26,26 @@ public class Surface extends JPanel {
   private Color stackColor = new Color(120, 100, 200);
   private Color wallColor = new Color(230, 230, 230);
 
-  private Color startColor = new Color(65, 255, 150, 100);
-  private Color endColor = new Color(255, 80, 180, 100);
+  private Color startColor = new Color(65, 255, 150, 200);
+  private Color endColor = new Color(255, 80, 180, 200);
+
+  private Color solutionColor = new Color(0, 0, 0, 100);
 
   private Stack<Cell> stack = new Stack<Cell>();
+
+  private Stack<Cell> solution = new Stack<Cell>();
+  private Cell fork;
 
   private Cell start;
   private Cell end;
 
   private int biggest = stack.size();
 
-  static boolean finished = false;
+  boolean finished = false;
 
   public Surface() {
+    System.out.println("NEW SURFACE");
+    finished = false;
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
     grid = new ArrayList<Cell>(ROWS * COLS);
     for (int j = 0; j < ROWS; j++) {
@@ -50,6 +57,7 @@ public class Surface extends JPanel {
 
     current = grid.get(0);
     start = current;
+    fork = null;
     stack.push(current);
   }
 
@@ -57,10 +65,6 @@ public class Surface extends JPanel {
     Graphics2D g2d = (Graphics2D) g.create();
     g2d.setColor(Color.GRAY);
     g2d.fillRect(0, 0, WIDTH, HEIGHT);
-    if (!finished) {
-      g2d.setColor(currentColor);
-      g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
-    }
     for (Cell c : grid) {
       Rectangle r = new Rectangle(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
       g2d.setColor(visitedColor);
@@ -69,6 +73,10 @@ public class Surface extends JPanel {
 
       g2d.setColor(stackColor);
       if (stack.contains(c))
+        g2d.fill(r);
+
+      g2d.setColor(solutionColor);
+      if (solution.contains(c))
         g2d.fill(r);
 
       g2d.setColor(startColor);
@@ -85,6 +93,10 @@ public class Surface extends JPanel {
       g2d.draw(c.getBottom());
       g2d.draw(c.getLeft());
     }
+    if (!finished) {
+      g2d.setColor(currentColor);
+      g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
+    }
   }
 
   @Override
@@ -100,13 +112,16 @@ public class Surface extends JPanel {
   public void tick() {
     if (stack.isEmpty()) {
       finished = true;
+      System.out.println(solution.size() + " " + biggest);
       render();
       return;
     }
     current.distFromStart = stack.size();
-    if(current.distFromStart > biggest) {
+    if (current.distFromStart > biggest) {
       biggest = current.distFromStart;
       end = current;
+      solution.clear();
+      fork = null;
     }
     current.visited = true;
     Cell next = current.getNeighbour();
@@ -114,20 +129,29 @@ public class Surface extends JPanel {
       next.visited = true;
 
       stack.push(current);
+      if (!solution.isEmpty()) solution.remove(current);
 
       removeWalls(current, next);
 
       current = next;
     } else if (!stack.isEmpty()) {
       current = stack.pop();
+      if (fork == null && current.getNeighbour() == null) {
+        solution.push(current);
+      } else if (fork == null && current.getNeighbour() != null) {
+        fork = current;
+      } else if (fork != null && current.equals(fork)) {
+        solution.push(current);
+        fork = null;
+      }
     }
   }
 
   private Cell getFurthestCell() {
     Cell end = new Cell(0, 0);
     int biggest = 0;
-    for(Cell c : grid) {
-      if(c.distFromStart > biggest) {
+    for (Cell c : grid) {
+      if (c.distFromStart > biggest) {
         biggest = c.distFromStart;
         end = c;
       }
