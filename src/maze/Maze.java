@@ -1,8 +1,11 @@
 package maze;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JFrame;
 
-public class Maze extends JFrame implements Runnable {
+public class Maze extends JFrame implements Runnable, MouseListener {
   private Thread thread;
   private boolean running = false;
 
@@ -16,6 +19,7 @@ public class Maze extends JFrame implements Runnable {
     super("Maze");
     surface = new Surface();
     add(surface);
+    addMouseListener(this);
     pack();
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +67,7 @@ public class Maze extends JFrame implements Runnable {
         // assign the time for the next update
         nextTime += delta;
         surface.tick();
-        if(surface.finished) stop();
+        if (surface.finished) running = false;
         if ((curTime < nextTime) || (skippedFrames > maxSkippedFrames)) {
           surface.render();
           skippedFrames = 1;
@@ -86,4 +90,27 @@ public class Maze extends JFrame implements Runnable {
     }
   }
 
+  @Override
+  public void mouseClicked(MouseEvent arg0) {}
+
+  @Override
+  public void mouseEntered(MouseEvent arg0) {}
+
+  @Override
+  public void mouseExited(MouseEvent arg0) {}
+
+  @Override
+  public void mousePressed(MouseEvent arg0) {
+    if(running) {
+      stop();
+      return;
+    }
+    surface = new Surface();
+    add(surface);
+    revalidate();
+    start();
+  }
+
+  @Override
+  public void mouseReleased(MouseEvent arg0) {}
 }
