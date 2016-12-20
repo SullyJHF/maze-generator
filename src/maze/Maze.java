@@ -8,6 +8,8 @@ public class Maze extends JFrame implements Runnable {
 
   private final int UPS = 5;
 
+  private double startTime;
+
   private Surface surface;
 
   public Maze() {
@@ -25,6 +27,7 @@ public class Maze extends JFrame implements Runnable {
     running = true;
     thread = new Thread(this);
     thread.start();
+    startTime = System.nanoTime() / 1000000000.0;
     System.out.println("Started!");
   }
 
@@ -33,6 +36,7 @@ public class Maze extends JFrame implements Runnable {
     running = false;
     try {
       System.out.println("Stopped!");
+      System.out.println("Generated in: " + (System.nanoTime() / 1000000000.0 - startTime) + " seconds");
       thread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
