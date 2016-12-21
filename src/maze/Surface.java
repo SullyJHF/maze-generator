@@ -12,7 +12,7 @@ import java.util.Stack;
 import javax.swing.JPanel;
 
 public class Surface extends JPanel {
-  private final static int WIDTH = 800;
+  private final static int WIDTH = 800 + 1;
   private final static int HEIGHT = WIDTH;
   static final int CELL_SIZE = 20;
   final static int ROWS = HEIGHT / CELL_SIZE;
