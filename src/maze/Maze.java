@@ -101,12 +101,13 @@ public class Maze extends JFrame implements Runnable, MouseListener {
 
   @Override
   public void mousePressed(MouseEvent arg0) {
-    if(running) {
+    if (running) {
       stop();
       return;
     }
     surface = new Surface();
     add(surface);
+    repaint();
     revalidate();
     start();
   }
