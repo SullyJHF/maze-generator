@@ -1,11 +1,13 @@
 package maze;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
-public class Maze extends JFrame implements Runnable, MouseListener {
+public class Maze extends JFrame implements Runnable, MouseListener, KeyListener {
   private Thread thread;
   private boolean running = false;
 
@@ -15,11 +17,15 @@ public class Maze extends JFrame implements Runnable, MouseListener {
 
   private Surface surface;
 
+  private FileHandler fh;
+
   public Maze() {
     super("Maze");
+    fh = new FileHandler();
     surface = new Surface();
     add(surface);
     addMouseListener(this);
+    addKeyListener(this);
     pack();
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,5 +119,18 @@ public class Maze extends JFrame implements Runnable, MouseListener {
   }
 
   @Override
-  public void mouseReleased(MouseEvent arg0) {}
+  public void mouseReleased(MouseEvent e) {}
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+      fh.screenshot(surface.getImage());
+    }
+  }
+
+  @Override
+  public void keyReleased(KeyEvent e) {}
+
+  @Override
+  public void keyTyped(KeyEvent e) {}
 }

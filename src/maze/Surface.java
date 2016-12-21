@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -47,6 +48,8 @@ public class Surface extends JPanel {
 
   boolean skipVisited = true;
 
+  BufferedImage mazeImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+
   public Surface() {
     System.out.println("NEW SURFACE");
     finished = false;
@@ -66,41 +69,44 @@ public class Surface extends JPanel {
   }
 
   public void doDrawing(Graphics g) {
-    Graphics2D g2d = (Graphics2D) g.create();
-    g2d.setColor(Color.GRAY);
-    g2d.fillRect(0, 0, WIDTH, HEIGHT);
+    Graphics2D panelG2d = (Graphics2D) g.create();
+    Graphics2D imageG2d = (Graphics2D) mazeImage.getGraphics();
+    imageG2d.setColor(Color.GRAY);
+    imageG2d.fillRect(0, 0, WIDTH, HEIGHT);
     for (Cell c : grid) {
       Rectangle r = new Rectangle(c.getX(), c.getY(), CELL_SIZE, CELL_SIZE);
-      g2d.setColor(visitedColor);
+      imageG2d.setColor(visitedColor);
       if (c.visited && !c.equals(current))
-        g2d.fill(r);
+        imageG2d.fill(r);
 
-      g2d.setColor(stackColor);
+      imageG2d.setColor(stackColor);
       if (stack.contains(c))
-        g2d.fill(r);
+        imageG2d.fill(r);
 
-      g2d.setColor(solutionColor);
+      imageG2d.setColor(solutionColor);
       if (showSolution && solution.contains(c))
-        g2d.fill(r);
+        imageG2d.fill(r);
 
-      g2d.setColor(startColor);
+      imageG2d.setColor(startColor);
       if (c.equals(start))
-        g2d.fill(r);
+        imageG2d.fill(r);
 
-      g2d.setColor(endColor);
+      imageG2d.setColor(endColor);
       if (c.equals(end))
-        g2d.fill(r);
+        imageG2d.fill(r);
 
-      g2d.setColor(wallColor);
-      g2d.draw(c.getTop());
-      g2d.draw(c.getRight());
-      g2d.draw(c.getBottom());
-      g2d.draw(c.getLeft());
+      imageG2d.setColor(wallColor);
+      imageG2d.draw(c.getTop());
+      imageG2d.draw(c.getRight());
+      imageG2d.draw(c.getBottom());
+      imageG2d.draw(c.getLeft());
     }
     if (!finished) {
-      g2d.setColor(currentColor);
-      g2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
+      imageG2d.setColor(currentColor);
+      imageG2d.fillRect(current.getX(), current.getY(), CELL_SIZE, CELL_SIZE);
     }
+
+    panelG2d.drawImage(mazeImage, 0, 0, this);
   }
 
   @Override
@@ -140,13 +146,13 @@ public class Surface extends JPanel {
       current = next;
     } else if (!stack.isEmpty()) {
       while (skipVisited && current.getNeighbour() == null) {
-        if(stack.isEmpty()) break;
+        if (stack.isEmpty()) break;
         current = stack.pop();
 
         fillSolution();
       }
 
-      if(!skipVisited) {
+      if (!skipVisited) {
         current = stack.pop();
         fillSolution();
       }
@@ -184,5 +190,9 @@ public class Surface extends JPanel {
       a.walls[2] = false;
       b.walls[0] = false;
     }
+  }
+
+  public BufferedImage getImage() {
+    return mazeImage;
   }
 }
